@@ -21,11 +21,13 @@ class Gallery extends Component {
     }
 
     return (
-      <div className="container">
+      this.state.trendingGifs ?
+      ( <div className="container">
         {this.state.trendingGifs.map(gif => (
           <img key={gif.id} src={gif.images.downsized.url} alt="" style={imgStyle}/>
         ))}
-      </div>
+      </div> ) :
+      <div> Error, please try again in 15 minutes :( </div>
     );
   }
 

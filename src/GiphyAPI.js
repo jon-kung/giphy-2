@@ -17,16 +17,19 @@ class GiphyAPI {
       // so the key we need depends on the HTTP verb
     } catch (err) {
       console.error('API Error:', err.response);
-      let message = err.response.data.message;
-      throw Array.isArray(message) ? message : [message];
+      // let message = err.response.data.message;
+      // throw Array.isArray(message) ? message : [message];
     }
   }
 
   static async fetchTrendingGifs() {
-    let result = await this.request(`/v1/gifs/trending`, { api_key });
-    return result.data;
+    try {
+      let result = await this.request(`/v1/gifs/trending`, { api_key, limit: 5 });
+      return result.data;
+    } catch (error) {
+      console.log('Error in fetching trending GIFS', error.response)
+    }
   }
-
 }
 
 export default GiphyAPI;
