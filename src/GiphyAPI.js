@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = `api.giphy.com`;
+const BASE_URL = `http://api.giphy.com`;
+const api_key = 'dc6zaTOxFJmzC';
 
 class GiphyAPI {
   static async request(endpoint, paramsOrData = {}, verb = 'get') {
@@ -22,8 +23,7 @@ class GiphyAPI {
   }
 
   static async fetchTrendingGifs() {
-    let result = await this.request(`${BASE_URL}/v1/gifs/trending`);
-    console.log(`testing fetchTrending, ${result}`);
+    let result = await this.request(`/v1/gifs/trending`, { api_key });
     return result.data;
   }
 
