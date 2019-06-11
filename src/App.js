@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import Gallery from './Gallery';
+import './App.css';
 
 function App() {
   return (
