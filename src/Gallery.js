@@ -32,7 +32,7 @@ class Gallery extends Component {
   };
 
   render() {
-    return <div className="container">{this.renderTrendingGifs()}</div>;
+    return <div>{this.renderTrendingGifs()}</div>;
   }
 }
 
