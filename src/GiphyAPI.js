@@ -24,7 +24,7 @@ class GiphyAPI {
 
   static async fetchTrendingGifs() {
     try {
-      let result = await this.request(`/v1/gifs/trending`, { api_key, limit: 2 });
+      let result = await this.request(`/v1/gifs/trending`, { api_key, limit: 8 });
       return result.data;
     } catch (error) {
       console.log('Error in fetching trending GIFS', error.response)
