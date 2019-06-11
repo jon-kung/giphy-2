@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = `http://api.giphy.com`;
-const api_key = 'dc6zaTOxFJmzC';
+const api_key = 'RmYeRMdgRGARKE7HfGZlmc6HcH5x1CJZ';
 
 class GiphyAPI {
   static async request(endpoint, paramsOrData = {}, verb = 'get') {
@@ -24,7 +24,7 @@ class GiphyAPI {
 
   static async fetchTrendingGifs() {
     try {
-      let result = await this.request(`/v1/gifs/trending`, { api_key, limit: 5 });
+      let result = await this.request(`/v1/gifs/trending`, { api_key, limit: 2 });
       return result.data;
     } catch (error) {
       console.log('Error in fetching trending GIFS', error.response)
