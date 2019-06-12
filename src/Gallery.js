@@ -21,7 +21,7 @@ class Gallery extends Component {
 
   renderTrendingGifs = () => {
     return this.state.trendingGifs ? (
-      <div className="container">
+      <div className="">
         {this.state.trendingGifs.map(gif => (
           <GifDetails gif={gif} key={gif.id} />
         ))}
@@ -36,21 +36,23 @@ class Gallery extends Component {
 
   renderSearchedGifs = () => {
     return this.state.searchedGifs ? (
-      <div className="container">
+      <div className="">
         {this.state.searchedGifs.map(gif => (
           <GifDetails gif={gif} key={gif.id} />
         ))}
       </div>
     ) : (
-      <div> Searched GIFS</div>
+      <div> Try searching for more GIFS! </div>
     );
   };
 
   render() {
     return (
-      <div>
+      <div className="container">
         <SearchBar getSearchResults={this.getSearchResults} />
+        <h1> TRENDING GIFS </h1>
         {this.renderTrendingGifs()}
+        <h1> SEARCHED GIFS </h1>
         {this.renderSearchedGifs()}
       </div>
     );
