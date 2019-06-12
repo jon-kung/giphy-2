@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import GiphyAPI from './GiphyAPI';
 import GifDetails from './GifDetails';
+import SearchBar from './SearchBar';
 
 class Gallery extends Component {
   constructor(props) {
     super(props);
-    this.state = { trendingGifs: [] };
+    this.state = { trendingGifs: [], searchedGifs: [] };
   }
 
   async componentDidMount() {
@@ -13,14 +14,16 @@ class Gallery extends Component {
     this.setState({ trendingGifs });
   }
 
+  getSearchResults = async searchQuery => {
+    let searchedGifs = await GiphyAPI.fetchSearchedGifs(searchQuery);
+    this.setState({ searchedGifs });
+  };
+
   renderTrendingGifs = () => {
     return this.state.trendingGifs ? (
       <div className="container">
         {this.state.trendingGifs.map(gif => (
-          <GifDetails
-            gif={gif}
-            key={gif.id}
-          />
+          <GifDetails gif={gif} key={gif.id} />
         ))}
       </div>
     ) : (
@@ -31,8 +34,26 @@ class Gallery extends Component {
     );
   };
 
+  renderSearchedGifs = () => {
+    return this.state.searchedGifs ? (
+      <div className="container">
+        {this.state.searchedGifs.map(gif => (
+          <GifDetails gif={gif} key={gif.id} />
+        ))}
+      </div>
+    ) : (
+      <div> Searched GIFS</div>
+    );
+  };
+
   render() {
-    return <div>{this.renderTrendingGifs()}</div>;
+    return (
+      <div>
+        <SearchBar getSearchResults={this.getSearchResults} />
+        {this.renderTrendingGifs()}
+        {this.renderSearchedGifs()}
+      </div>
+    );
   }
 }
 

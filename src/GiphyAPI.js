@@ -30,6 +30,16 @@ class GiphyAPI {
       console.log('Error in fetching trending GIFS', error.response)
     }
   }
+
+  static async fetchSearchedGifs(q){
+    try {
+      let result = await this.request(`/v1/gifs/search`, { api_key, q, limit: 8 });
+      return result.data;
+    } catch (error) {
+      console.log('Error in fetching GIF by search query', error.response)
+    }
+  }
+
 }
 
 export default GiphyAPI;
