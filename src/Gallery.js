@@ -11,6 +11,7 @@ class Gallery extends Component {
       trendingGifs: [],
       searchedGifs: [],
       moreGifs: [],
+      searchQuery: '',
       done: null,
       isLoading: false,
       error: false
@@ -28,15 +29,31 @@ class Gallery extends Component {
   }
 
   loadMoreGifs = async () => {
+    const { searchQuery, trendingGifs, searchedGifs, moreGifs } = this.state;
     this.setState({ isLoading: true });
-    let offset = this.state.trendingGifs.length + this.state.moreGifs.length;
-    let newGifs = await GiphyAPI.fetchMoreGifs(offset);
-    setTimeout(() => {
-      this.setState({
-        isLoading: false,
-        moreGifs: [...this.state.moreGifs, ...newGifs]
-      });
-    }, 2000);
+
+    if (searchQuery) {
+      let offset = searchedGifs.length + moreGifs.length;
+      let newSearchedGifs = await GiphyAPI.fetchSearchedGifs(
+        searchQuery,
+        offset
+      );
+      setTimeout(() => {
+        this.setState({
+          isLoading: false,
+          moreGifs: [...moreGifs, ...newSearchedGifs]
+        });
+      }, 2000);
+    } else {
+      let offset = trendingGifs.length + moreGifs.length;
+      let newGifs = await GiphyAPI.fetchTrendingGifs(offset);
+      setTimeout(() => {
+        this.setState({
+          isLoading: false,
+          moreGifs: [...moreGifs, ...newGifs]
+        });
+      }, 2000);
+    }
   };
 
   async componentDidMount() {
@@ -46,7 +63,7 @@ class Gallery extends Component {
 
   getSearchResults = async searchQuery => {
     let searchedGifs = await GiphyAPI.fetchSearchedGifs(searchQuery);
-    this.setState({ ...this.state.searchedGifs, searchedGifs });
+    this.setState({ searchedGifs, searchQuery, moreGifs: [] });
   };
 
   renderTrendingGifs = () => {
@@ -62,14 +79,12 @@ class Gallery extends Component {
   };
 
   renderSearchedGifs = () => {
-    return this.state.searchedGifs.length > 0 ? (
+    return (
       <div className="">
         {this.state.searchedGifs.map(gif => (
           <GifDetails gif={gif} key={gif.id} />
         ))}
       </div>
-    ) : (
-      <p> Try searching for more GIFS! </p>
     );
   };
 
@@ -85,15 +100,25 @@ class Gallery extends Component {
   };
 
   render() {
+    const {searchQuery, searchedGifs} = this.state;
     return (
       <div className="container">
         <SearchBar getSearchResults={this.getSearchResults} />
-        <h1> TRENDING GIFS </h1>
-        {this.renderTrendingGifs()}
-        <h1> SEARCHED GIFS </h1>
-        {this.renderSearchedGifs()}
-        <h1> SCROLL FOR MOAR GIFS </h1>
-        {this.renderMoreGifs()}
+        {searchedGifs.length > 0 ? (
+          <div>
+            {<h1> GIFS of {searchQuery.toUpperCase()}</h1>}
+            {this.renderSearchedGifs()}
+            <h1> SCROLL FOR MOAR {searchQuery.toUpperCase()} GIFS </h1>
+            {this.renderMoreGifs()}
+          </div>
+        ) : (
+          <div>
+            <h1> TRENDING GIFS </h1>
+            {this.renderTrendingGifs()}
+            <h1> SCROLL FOR MOAR TRENDING GIFS </h1>
+            {this.renderMoreGifs()}
+          </div>
+        )}
       </div>
     );
   }

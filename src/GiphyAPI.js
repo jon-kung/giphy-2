@@ -23,32 +23,21 @@ class GiphyAPI {
     }
   }
 
-  static async fetchTrendingGifs() {
+  static async fetchTrendingGifs(offset=0) {
     try {
-      let result = await this.request(`/v1/gifs/trending`, { api_key, limit: 10 });
+      let result = await this.request(`/v1/gifs/trending`, { api_key, offset, limit: 10 });
       return result.data;
     } catch (error) {
       console.log('Error in fetching trending GIFS', error.response)
     }
   }
 
-  static async fetchSearchedGifs(q){
+  static async fetchSearchedGifs(q, offset=0){
     try {
-      let result = await this.request(`/v1/gifs/search`, { api_key, q, limit: 10 });
+      let result = await this.request(`/v1/gifs/search`, { api_key, q, offset, limit: 10 });
       return result.data;
     } catch (error) {
       console.log('Error in fetching GIF by search query', error.response)
-    }
-  }
-
-
-  //  Use this for infinite scroll, will need to offset by the current length of trendingGifs []
-  static async fetchMoreGifs(offset){
-    try {
-      let result = await this.request(`/v1/gifs/trending`, { api_key, offset, limit: 10 });
-      return result.data;
-    } catch (error) {
-      console.log('Error in fetching more GIFs', error.response)
     }
   }
 
