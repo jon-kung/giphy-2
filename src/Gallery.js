@@ -16,7 +16,7 @@ class Gallery extends Component {
       isLoading: false,
       error: false
     };
-
+// kind of buggy on scroll, doesn't work on certain window sizes
     window.onscroll = () => {
       if (this.state.error || this.state.isLoading) return;
       if (
@@ -31,7 +31,8 @@ class Gallery extends Component {
   loadMoreGifs = async () => {
     const { searchQuery, trendingGifs, searchedGifs, moreGifs } = this.state;
     this.setState({ isLoading: true });
-
+    // loads additional GIFS for infinite scroll based on 
+    // trending GIFS (default) or user's search query if available
     if (searchQuery) {
       let offset = searchedGifs.length + moreGifs.length;
       let newSearchedGifs = await GiphyAPI.fetchSearchedGifs(
@@ -61,11 +62,13 @@ class Gallery extends Component {
     this.setState({ trendingGifs, done: true });
   }
 
+  // This will be passed to our SearchBar, which will update our searchQuery state
   getSearchResults = async searchQuery => {
     let searchedGifs = await GiphyAPI.fetchSearchedGifs(searchQuery);
     this.setState({ searchedGifs, searchQuery, moreGifs: [] });
   };
 
+  // Renders 10 trending gifs for our homepage
   renderTrendingGifs = () => {
     return this.state.done ? (
       <div className="">
@@ -78,6 +81,7 @@ class Gallery extends Component {
     );
   };
 
+  // Renders 10 gifs based off search query
   renderSearchedGifs = () => {
     return (
       <div className="">
@@ -88,6 +92,7 @@ class Gallery extends Component {
     );
   };
 
+  // renders additional gifs upon scrolling down
   renderMoreGifs = () => {
     return (
       <div className="">
