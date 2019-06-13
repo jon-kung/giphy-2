@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 class GifDetails extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = { isLoading: true };
+  }
+
+  componentDidMount() {
+    this.setState({ isLoading: false });
+  }
+
+  renderGif = () => {
     let { gif } = this.props;
 
-    return (
-      <div className="wrapper">
+    return this.state.isLoading ? (
+      <LoadingSpinner />
+    ) : (
+      <div>
         <img
           className="image"
           key={gif.id}
@@ -20,6 +32,14 @@ class GifDetails extends Component {
             <p> Source: {gif.source_tld ? gif.source_tld : 'Unknown'} </p>
           </div>
         </div>
+      </div>
+    );
+  };
+
+  render() {
+    return (
+      <div className="wrapper">
+        {this.renderGif()}
       </div>
     );
   }
