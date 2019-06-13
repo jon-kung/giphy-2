@@ -41,6 +41,17 @@ class GiphyAPI {
     }
   }
 
+
+  //  Use this for infinite scroll, will need to offset by the current length of trendingGifs []
+  static async fetchMoreGifs(offset){
+    try {
+      let result = await this.request(`/v1/gifs/trending`, { api_key, offset, limit: 10 });
+      return result.data;
+    } catch (error) {
+      console.log('Error in fetching more GIFs', error.response)
+    }
+  }
+
 }
 
 export default GiphyAPI;
