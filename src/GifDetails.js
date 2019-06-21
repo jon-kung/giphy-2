@@ -30,6 +30,7 @@ class GifDetails extends Component {
             <p> Username: {gif.username ? gif.username : 'Anonymous'} </p>
             <p> Rating: {gif.rating.toUpperCase()} </p>
             <p> Source: {gif.source_tld ? gif.source_tld : 'Unknown'} </p>
+            <i class="fas fa-heart" onClick={this.addFavorite}></i>
           </div>
         </div>
       </div>

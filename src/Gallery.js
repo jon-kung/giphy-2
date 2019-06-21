@@ -11,6 +11,7 @@ class Gallery extends Component {
       trendingGifs: [],
       searchedGifs: [],
       moreGifs: [],
+      favoriteGifs: [],
       searchQuery: '',
       done: null,
       isLoading: false,
@@ -69,6 +70,12 @@ class Gallery extends Component {
     let searchedGifs = await GiphyAPI.fetchSearchedGifs(searchQuery);
     this.setState({ searchedGifs, searchQuery, moreGifs: [] });
   };
+
+  // This will be passed down to GifDetails
+  addFavorite = async newFavoriteGif => {
+    const favoriteGifs = this.state;
+    this.setState({favoriteGifs: [...favoriteGifs, newFavoriteGif]})
+  }
 
   // Renders 10 trending gifs to our app
   renderTrendingGifs = () => {
