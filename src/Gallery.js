@@ -82,7 +82,7 @@ class Gallery extends Component {
     return this.state.done ? (
       <div className="">
         {this.state.trendingGifs.map(gif => (
-          <GifDetails gif={gif} key={gif.id} />
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite}/>
         ))}
       </div>
     ) : (
@@ -95,7 +95,7 @@ class Gallery extends Component {
     return (
       <div className="">
         {this.state.searchedGifs.map(gif => (
-          <GifDetails gif={gif} key={gif.id} />
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite}/>
         ))}
       </div>
     );
@@ -106,7 +106,7 @@ class Gallery extends Component {
     return (
       <div className="">
         {this.state.moreGifs.map(gif => (
-          <GifDetails gif={gif} key={gif.id} />
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite}/>
         ))}
         {this.state.isLoading ? <LoadingSpinner /> : ''}
       </div>
