@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GiphyAPI from './GiphyAPI';
+import GiphyAPI from './API/GiphyAPI';
 import GifDetails from './GifDetails';
 import SearchBar from './SearchBar';
 import LoadingSpinner from './LoadingSpinner';

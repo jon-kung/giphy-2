@@ -1,5 +1,5 @@
 import axios from 'axios';
-import SECRET from './config';
+import SECRET from '../config';
 
 const BASE_URL = `http://api.giphy.com`;
 const api_key = SECRET;
