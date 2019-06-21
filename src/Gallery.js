@@ -16,7 +16,7 @@ class Gallery extends Component {
       isLoading: false,
       error: false
     };
-// kind of buggy on scroll, doesn't work on certain window sizes
+    // kind of buggy on scroll, doesn't work on certain window sizes
     window.onscroll = () => {
       if (this.state.error || this.state.isLoading) return;
       if (
@@ -28,11 +28,17 @@ class Gallery extends Component {
     };
   }
 
+  // Once Gallery is mounted, we'll show some trending gifs
+  async componentDidMount() {
+    let trendingGifs = await GiphyAPI.fetchTrendingGifs();
+    this.setState({ trendingGifs, done: true });
+  }
+
+  // Loads more GIFS needed for infinite scroll
   loadMoreGifs = async () => {
     const { searchQuery, trendingGifs, searchedGifs, moreGifs } = this.state;
     this.setState({ isLoading: true });
-    // loads additional GIFS for infinite scroll based on 
-    // trending GIFS (default) or user's search query if available
+    // loads more GIFS based on user's search query if available
     if (searchQuery) {
       let offset = searchedGifs.length + moreGifs.length;
       let newSearchedGifs = await GiphyAPI.fetchSearchedGifs(
@@ -45,30 +51,26 @@ class Gallery extends Component {
           moreGifs: [...moreGifs, ...newSearchedGifs]
         });
       }, 2000);
+      // Else loads more trending GIFS
     } else {
       let offset = trendingGifs.length + moreGifs.length;
-      let newGifs = await GiphyAPI.fetchTrendingGifs(offset);
+      let newTrendingGifs = await GiphyAPI.fetchTrendingGifs(offset);
       setTimeout(() => {
         this.setState({
           isLoading: false,
-          moreGifs: [...moreGifs, ...newGifs]
+          moreGifs: [...moreGifs, ...newTrendingGifs]
         });
       }, 2000);
     }
   };
 
-  async componentDidMount() {
-    let trendingGifs = await GiphyAPI.fetchTrendingGifs();
-    this.setState({ trendingGifs, done: true });
-  }
-
-  // This will be passed to our SearchBar, which will update our searchQuery state
+  // This will be passed down to our SearchBar, which will tell the Gallery what the user's query was
   getSearchResults = async searchQuery => {
     let searchedGifs = await GiphyAPI.fetchSearchedGifs(searchQuery);
     this.setState({ searchedGifs, searchQuery, moreGifs: [] });
   };
 
-  // Renders 10 trending gifs for our homepage
+  // Renders 10 trending gifs to our app
   renderTrendingGifs = () => {
     return this.state.done ? (
       <div className="">
@@ -105,7 +107,7 @@ class Gallery extends Component {
   };
 
   render() {
-    const {searchQuery, searchedGifs} = this.state;
+    const { searchQuery, searchedGifs } = this.state;
     return (
       <div className="container">
         <SearchBar getSearchResults={this.getSearchResults} />
