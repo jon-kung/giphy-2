@@ -11,9 +11,9 @@ class GifDetails extends Component {
     this.setState({ isLoading: false });
   }
 
-  handleAddFavorite = gifObject => {
-    this.props.addFavorite(gifObject)
-  }
+  // handleAddFavorite = gifObject => {
+  //   this.props.addFavorite(gifObject)
+  // }
 
 
   renderGif = () => {
@@ -35,7 +35,7 @@ class GifDetails extends Component {
             <p> Username: {gif.username ? gif.username : 'Anonymous'} </p>
             <p> Rating: {gif.rating.toUpperCase()} </p>
             <p> Source: {gif.source_tld ? gif.source_tld : 'Unknown'} </p>
-            <i class="fas fa-heart" onClick={this.handleAddFavorite(gif)}></i>
+            {/* <i class="fas fa-heart" onClick={this.handleAddFavorite(gif)}></i> */}
           </div>
         </div>
       </div>

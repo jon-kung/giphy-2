@@ -72,10 +72,10 @@ class Gallery extends Component {
   };
 
   // This will be passed down to GifDetails
-  addFavorite = async newFavoriteGif => {
-    const favoriteGifs = this.state;
-    this.setState({favoriteGifs: [...favoriteGifs, newFavoriteGif]})
-  }
+  // addFavorite = async newFavoriteGif => {
+  //   const favoriteGifs = this.state;
+  //   this.setState({favoriteGifs: [...favoriteGifs, newFavoriteGif]})
+  // }
 
   // Renders 10 trending gifs to our app
   renderTrendingGifs = () => {
