@@ -15,7 +15,8 @@ class Gallery extends Component {
       searchQuery: '',
       done: null,
       isLoading: false,
-      error: false
+      error: false,
+      favoriteView: false
     };
     // kind of buggy on scroll, doesn't work on certain window sizes
     window.onscroll = () => {
@@ -32,7 +33,13 @@ class Gallery extends Component {
   // Once Gallery is mounted, we'll show some trending gifs
   async componentDidMount() {
     let trendingGifs = await GiphyAPI.fetchTrendingGifs();
-    this.setState({ trendingGifs, done: true });
+    let localFavoriteGifs = JSON.parse(localStorage.getItem('favGifs'));
+    this.setState({ trendingGifs, done: true, favoriteGifs: localFavoriteGifs });
+  }
+
+  // Syncs local storage with favorite GIFs
+  componentDidUpdate(){
+    localStorage.setItem('favGifs', JSON.stringify(this.state.favoriteGifs));
   }
 
   // Loads more GIFS needed for infinite scroll
@@ -65,24 +72,42 @@ class Gallery extends Component {
     }
   };
 
-  // This will be passed down to our SearchBar, which will tell the Gallery what the user's query was
+  // This will be passed down to our SearchBar, which sends the user's query to the Gallery
   getSearchResults = async searchQuery => {
     let searchedGifs = await GiphyAPI.fetchSearchedGifs(searchQuery);
     this.setState({ searchedGifs, searchQuery, moreGifs: [] });
   };
 
-  // This will be passed down to GifDetails
-  // addFavorite = async newFavoriteGif => {
-  //   const favoriteGifs = this.state;
-  //   this.setState({favoriteGifs: [...favoriteGifs, newFavoriteGif]})
-  // }
+  // This will be passed down to GifDetails, which sends a newFavorite up to the Gallery
+  addFavorite = async newFavoriteGif => {
+    const { favoriteGifs } = this.state;
+    this.setState({ favoriteGifs: [...favoriteGifs, newFavoriteGif] });
+  };
+
+  // This will be used to toggle to Favorite GIFS
+  toggleFavoritesView = () => {
+    this.setState(prevState => ({ favoriteView: !prevState.favoriteView }));
+  };
+
+  // Renders all favorite GIFS -- Testing will move this to a diff page using React Router
+  renderFavoriteGifs = () => {
+    return this.state.favoriteGifs.length > 0 ? (
+      <div>
+        {this.state.favoriteGifs.map(gif => (
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite} />
+        ))}
+      </div>
+    ) : (
+      <h2> You have no favorites added :( </h2>
+    );
+  };
 
   // Renders 10 trending gifs to our app
   renderTrendingGifs = () => {
     return this.state.done ? (
       <div className="">
         {this.state.trendingGifs.map(gif => (
-          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite}/>
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite} />
         ))}
       </div>
     ) : (
@@ -95,7 +120,7 @@ class Gallery extends Component {
     return (
       <div className="">
         {this.state.searchedGifs.map(gif => (
-          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite}/>
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite} />
         ))}
       </div>
     );
@@ -106,7 +131,7 @@ class Gallery extends Component {
     return (
       <div className="">
         {this.state.moreGifs.map(gif => (
-          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite}/>
+          <GifDetails gif={gif} key={gif.id} addFavorite={this.addFavorite} />
         ))}
         {this.state.isLoading ? <LoadingSpinner /> : ''}
       </div>
@@ -117,7 +142,20 @@ class Gallery extends Component {
     const { searchQuery, searchedGifs } = this.state;
     return (
       <div className="container">
-        <SearchBar getSearchResults={this.getSearchResults} />
+        <SearchBar
+          getSearchResults={this.getSearchResults}
+          toggleFavoritesView={this.toggleFavoritesView}
+        />
+
+        {this.state.favoriteView ? (
+          <div>
+            <h1> YOUR FAVORITE GIFS </h1>
+            {this.renderFavoriteGifs()}
+          </div>
+        ) : (
+          <div />
+        )}
+
         {searchedGifs.length > 0 ? (
           <div>
             {<h1> GIFS of {searchQuery.toUpperCase()}</h1>}

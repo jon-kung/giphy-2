@@ -20,27 +20,35 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <form
-        onSubmit={this.handleSubmit}
-        className="form-inline justify-content-center"
-      >
-        <div className="form-group m-1">
-          <input
-            className="form-control m-1"
-            type="text"
-            name="search"
-            placeholder="Search for GIFS here!"
-            onChange={this.handleChange}
-          />
+      <div>
+        <form
+          onSubmit={this.handleSubmit}
+          className="form-inline justify-content-center"
+        >
+          <div className="form-group m-1">
+            <input
+              className="form-control m-1"
+              type="text"
+              name="search"
+              placeholder="Search for GIFS here!"
+              onChange={this.handleChange}
+            />
+            <button
+              type="submit"
+              className="btn btn-secondary rounded m-1"
+              name="searchButton"
+            >
+              Search Giphy!
+            </button>
+          </div>
           <button
-            type="submit"
-            className="btn btn-secondary rounded m-1"
-            name="searchButton"
+            onClick={this.props.toggleFavoritesView}
+            className="btn btn-primary rounded m-1"
           >
-            Search Giphy!
+            View Favorites
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     );
   }
 }
